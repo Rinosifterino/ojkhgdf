@@ -103,6 +103,19 @@ services:
       - redis
     restart: always
 
+  client-test:
+    image: nicolaka/netshoot # Imagem com muitas ferramentas de rede
+    container_name: client-test
+    networks:
+      trabalho_net:
+    command: sleep infinity # Mantém o container rodando
+    depends_on:
+      - dns
+      - app1
+      - app2
+      - app3
+
+
 volumes:
   db_data:
   redis_data:

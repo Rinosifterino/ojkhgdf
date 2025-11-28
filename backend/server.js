@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt');
 const os = require('os');
 
 // --- Configurações ---
-const APP_PORT = 3000;
+const APP_PORT = 80;
 const HOSTNAME = os.hostname();
 const DB_CONFIG = {
     user: process.env.POSTGRES_USER || 'user',
