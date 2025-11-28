@@ -1,0 +1,17 @@
+{
+  "name": "trabalho-engenharia-backend",
+  "version": "1.0.0",
+  "description": "Backend para o trabalho de arquitetura distribuída com sessão centralizada.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "pg": "^8.11.3",
+    "connect-redis": "^7.1.0",
+    "redis": "^4.6.13",
+    "bcrypt": "^5.1.1"
+  }
+}

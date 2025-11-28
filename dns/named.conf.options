@@ -1,0 +1,20 @@
+options {
+    directory "/var/cache/bind";
+
+    // Seus servidores de encaminhamento (forwarders)
+    // Para fins de teste, usaremos os do Google
+    forwarders {
+        8.8.8.8;
+        8.8.4.4;
+    };
+
+    allow-query { any; };
+    listen-on { any; };
+    listen-on-v6 { none; };
+    
+    // Desabilita DNSSEC para simplificar
+    dnssec-enable no;
+    dnssec-validation no;
+
+    pid-file "/var/run/named/named.pid";
+};

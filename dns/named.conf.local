@@ -1,0 +1,6 @@
+// Declaração da zona local para o trabalho
+zone "meutrabalho.com.br" {
+    type master;
+    file "/etc/bind/zones/db.meutrabalho.com.br";
+    allow-update { none; };
+};

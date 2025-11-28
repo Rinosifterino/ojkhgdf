@@ -1,0 +1,23 @@
+$TTL 3600
+@       IN      SOA     ns1.meutrabalho.com.br. admin.meutrabalho.com.br. (
+                        2025112701 ; Serial
+                        3600       ; Refresh
+                        1800       ; Retry
+                        604800     ; Expire
+                        60         ; Negative Cache TTL
+)
+; Servidores de Nome
+@       IN      NS      ns1.meutrabalho.com.br.
+
+; Hostnames
+ns1     IN      A       172.20.0.10 ; IP fictício para o servidor DNS (será o IP do container 'dns')
+
+; Configuração Round Robin para a aplicação web
+; O 'app' será o nome do serviço no docker-compose, e o Bind9 resolverá
+; para os IPs dos containers 'app1', 'app2', 'app3'
+www     IN      A       172.20.0.11 ; IP fictício para app1
+www     IN      A       172.20.0.12 ; IP fictício para app2
+www     IN      A       172.20.0.13 ; IP fictício para app3
+
+; O docker-compose irá mapear esses IPs para os containers
+; A rede docker será configurada para usar a faixa 172.20.0.0/24

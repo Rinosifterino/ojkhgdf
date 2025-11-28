@@ -1,0 +1,108 @@
+version: '3.8'
+
+# Rede customizada para controle de IPs e para o DNS funcionar corretamente
+networks:
+  trabalho_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+
+services:
+  # 1. Servidor DNS (Bind9)
+  dns:
+    build:
+      context: ./dns
+      dockerfile: Dockerfile
+    container_name: dns
+    networks:
+      trabalho_net:
+        ipv4_address: 172.20.0.10 # IP fixo para ser referenciado no arquivo de zona
+    ports:
+      - "53:53/udp" # Necessário para que o host possa usar este DNS
+      - "53:53/tcp"
+    cap_add:
+      - NET_ADMIN # Permite o Bind9 rodar
+    restart: always
+
+  # 2. Banco de Dados (PostgreSQL)
+  db:
+    image: postgres:16-alpine
+    container_name: db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: trabalho_db
+    networks:
+      trabalho_net:
+        ipv4_address: 172.20.0.20 # IP fixo para o backend se conectar
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    restart: always
+
+  # 3. Servidor de Sessão Centralizada (Redis)
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    networks:
+      trabalho_net:
+        ipv4_address: 172.20.0.30 # IP fixo para o backend se conectar
+    volumes:
+      - redis_data:/data
+    restart: always
+
+  # 4. Servidores de Aplicação (Backend + Frontend embutido) - 3 instâncias
+  app1:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: app1
+    environment:
+      NODE_ENV: production
+      POSTGRES_HOST: db
+      REDIS_HOST: redis
+    networks:
+      trabalho_net:
+        ipv4_address: 172.20.0.11 # IP fixo para o Round Robin DNS
+    depends_on:
+      - db
+      - redis
+    restart: always
+
+  app2:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: app2
+    environment:
+      NODE_ENV: production
+      POSTGRES_HOST: db
+      REDIS_HOST: redis
+    networks:
+      trabalho_net:
+        ipv4_address: 172.20.0.12 # IP fixo para o Round Robin DNS
+    depends_on:
+      - db
+      - redis
+    restart: always
+
+  app3:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: app3
+    environment:
+      NODE_ENV: production
+      POSTGRES_HOST: db
+      REDIS_HOST: redis
+    networks:
+      trabalho_net:
+        ipv4_address: 172.20.0.13 # IP fixo para o Round Robin DNS
+    depends_on:
+      - db
+      - redis
+    restart: always
+
+volumes:
+  db_data:
+  redis_data:
