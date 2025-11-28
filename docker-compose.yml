@@ -14,7 +14,7 @@ services:
     build:
       context: ./dns
       dockerfile: Dockerfile
-    container_name: dns
+    container_name: RR_DNS
     networks:
       trabalho_net:
         ipv4_address: 172.20.0.10 # IP fixo para ser referenciado no arquivo de zona
@@ -56,7 +56,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: app1
+    container_name: servidor_1
     hostname: servidor_1
     environment:
       NODE_ENV: production
@@ -74,7 +74,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: app2
+    container_name: servidor_2
     hostname: servidor_2
     environment:
       NODE_ENV: production
@@ -92,7 +92,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: app3
+    container_name: servidor_3
     hostname: servidor_3
     environment:
       NODE_ENV: production
@@ -105,19 +105,7 @@ services:
       - db
       - redis
     restart: always
-
-  client-test:
-    image: nicolaka/netshoot # Imagem com muitas ferramentas de rede
-    container_name: client-test
-    networks:
-      trabalho_net:
-    command: sleep infinity # Mantém o container rodando
-    depends_on:
-      - dns
-      - app1
-      - app2
-      - app3
-
+    
   ubuntu_desktop:
       image: lscr.io/linuxserver/webtop:ubuntu-xfce
       container_name: meu_linux_grafico
