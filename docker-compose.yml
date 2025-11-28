@@ -57,6 +57,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: app1
+    hostname: servidor_1
     environment:
       NODE_ENV: production
       POSTGRES_HOST: db
@@ -74,6 +75,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: app2
+    hostname: servidor_2
     environment:
       NODE_ENV: production
       POSTGRES_HOST: db
@@ -91,6 +93,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: app3
+    hostname: servidor_3
     environment:
       NODE_ENV: production
       POSTGRES_HOST: db
